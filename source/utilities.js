@@ -1,10 +1,6 @@
 /**
  * Log next arguments if {loud} is true
  */
-export function log(loud, ...args) {
-    if (loud) console.log(...args)
-}
-
 export const isLesserThan = (y, v) => y < v
 export const isGreaterThan = (y, v) => y > v
 export const isInBetween = (y, v0, v1) => y >= v0 && y <= v1
@@ -23,24 +19,10 @@ export function lerp(start, end, time, round) {
 }
 
 /**
- * Check if {value} is of type Array
- */
-export function isArray(value) {
-    return Object.prototype.toString.call(value) === '[object Array]'
-}
-
-/**
  * Returns an Object's values as an Array
  */
 export function objectToArray(object) {
     return Object.keys(object).map(key => object[key])
-}
-
-/**
- * Returns a new Array without the value of {x}
- */
-export function arrayWithout(array, x) {
-    return array.filter(y => y !== x)
 }
 
 /**
@@ -75,74 +57,74 @@ export function getElementTop(element) {
 /**
  * Create a guideline
  */
-export function addGuide(pos, col = 0) {
-    const guide = document.createElement('div')
-    const label = document.createElement('span')
-    const line = document.createElement('div')
+// export function addGuide(pos, col = 0) {
+//     const guide = document.createElement('div')
+//     const label = document.createElement('span')
+//     const line = document.createElement('div')
 
-    guide.style.zIndex = 999
-    guide.style.width = '100%'
-    guide.style.position = 'absolute'
-    guide.style.top = `${pos}px`
-    guide.style.left = 0
+//     guide.style.zIndex = 999
+//     guide.style.width = '100%'
+//     guide.style.position = 'absolute'
+//     guide.style.top = `${pos}px`
+//     guide.style.left = 0
 
-    label.style.borderWidth = 0
-    label.style.borderStyle = 'dashed'
-    label.style.position = 'absolute'
-    label.style.margin = '2px 5px'
+//     label.style.borderWidth = 0
+//     label.style.borderStyle = 'dashed'
+//     label.style.position = 'absolute'
+//     label.style.margin = '2px 5px'
 
-    document.body.appendChild(guide)
+//     document.body.appendChild(guide)
 
-    return {
-        color(value) {
-            // guide.style.borderTopColor = value
-            line.style.borderLeftColor = value
-            label.style.color = value
-            label.style.borderColor = value
+//     return {
+//         color(value) {
+//             // guide.style.borderTopColor = value
+//             line.style.borderLeftColor = value
+//             label.style.color = value
+//             label.style.borderColor = value
 
-            return this
-        },
-        fixed() {
-            guide.style.position = 'fixed'
+//             return this
+//         },
+//         fixed() {
+//             guide.style.position = 'fixed'
 
-            return this
-        },
-        label(text, top) {
-            label.innerHTML = text
+//             return this
+//         },
+//         label(text, top) {
+//             label.innerHTML = text
 
-            guide.appendChild(label)
+//             guide.appendChild(label)
 
-            if (top) {
-                label.style.bottom = 0
-                label.style.borderBottomWidth = '1px'
-            } else {
-                label.style.top = 0
-                label.style.borderTopWidth = '1px'
-            }
+//             if (top) {
+//                 label.style.bottom = 0
+//                 label.style.borderBottomWidth = '1px'
+//             } else {
+//                 label.style.top = 0
+//                 label.style.borderTopWidth = '1px'
+//             }
 
-            return this
-        },
-        col(i) {
-            guide.style.left = `${20 * i}px`
+//             return this
+//         },
+//         col(i) {
+//             guide.style.left = `${20 * i}px`
 
-            return this
-        },
-        width(w) {
-            label.style.width = w
+//             return this
+//         },
+//         width(w) {
+//             label.style.width = w
 
-            return this
-        },
-        line(h) {
-            line.style.borderLeft = '1px dashed green'
-            line.style.position = 'absolute'
-            line.style.top = 0
-            line.style.left = 0
-            line.style.width = '1px'
-            line.style.height = `${h}px`
+//             return this
+//         },
+//         line(h) {
+//             line.style.borderLeft = '1px dashed green'
+//             line.style.position = 'absolute'
+//             line.style.top = 0
+//             line.style.left = 0
+//             line.style.width = '1px'
+//             line.style.height = `${h}px`
 
-            guide.appendChild(line)
+//             guide.appendChild(line)
 
-            return this
-        }
-    }
-}
+//             return this
+//         }
+//     }
+// }
