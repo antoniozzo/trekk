@@ -22,19 +22,25 @@ const addTimeline = timelines =>
                 ...options
             },
             listeners : {
-                [STATUS.LOADING]  : [console.log],
-                [STATUS.WAITING]  : [console.log],
-                [STATUS.WALKING]  : [console.log],
-                [STATUS.FINISHED] : [console.log],
-                progress          : [console.log]
+                [STATUS.LOADING]  : [],
+                [STATUS.WAITING]  : [],
+                [STATUS.WALKING]  : [],
+                [STATUS.FINISHED] : [],
+                progress          : []
             },
-            on  : (event, listener) => { timeline.listeners[event].push(listener) },
+            on  : (event, listener) => {
+                timeline.listeners[event].push(listener)
+
+                return timeline
+            },
             off : (event, listener) => {
                 const index = timeline.listeners[event].indexOf(listener)
 
                 if (index !== -1) {
                     timeline.listeners[event].splice(index, 1)
                 }
+
+                return timeline
             }
         }
 
@@ -48,38 +54,35 @@ const removeTimeline = timelines =>
         const index = timelines.indexOf(timeline)
 
         if (index !== -1) {
-            timelines.unshift(index, 1)
+            timelines.splice(index, 1)
         }
     }
 
 const fromElement = timelineCreator =>
-    (element, onProgress, options) =>
+    (element, options) =>
         timelineCreator({
             start   : () => getElementTop(element),
             length  : () => element.offsetHeight,
-            onState : state => {
-                removeClassesFromElement(element, STATUS_ARRAY)
-                addClassesToElement(element, [state])
-            },
-            onProgress,
+            // onState : state => {
+            //     removeClassesFromElement(element, STATUS_ARRAY)
+            //     addClassesToElement(element, state)
+            // },
             ...options
         })
 
 const fromPixels = timelineCreator =>
-    (start, length, onProgress, options) =>
+    (start, length, options) =>
         timelineCreator({
             start  : () => start,
             length : () => length,
-            onProgress,
             ...options
         })
 
 const fromPercentage = timelineCreator =>
-    (timeline, start, length, onProgress, options) =>
+    (timeline, start, length, options) =>
         timelineCreator({
-            start  : () => timeline.start() + (timeline.length() * start),
-            length : () => timeline.length() * length,
-            onProgress,
+            start  : () => timeline.options.start() + (timeline.options.length() * start),
+            length : () => timeline.options.length() * length,
             ...options
         })
 
@@ -87,6 +90,7 @@ export default timelines => {
     const timelineCreator = addTimeline(timelines)
 
     return {
+        addTimeline    : timelineCreator,
         fromPixels     : fromPixels(timelineCreator),
         fromElement    : fromElement(timelineCreator),
         fromPercentage : fromPercentage(timelineCreator),

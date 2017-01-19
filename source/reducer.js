@@ -7,21 +7,13 @@ import {
     isInBetween
 } from './utilities'
 
-import timeline from './timeline'
-
-const timelines = []
-
-const { addTimeline } = timeline(timelines)
-
-export { addTimeline }
-
-const nextProgress = (prev, p, l) => {
+export const nextProgress = (prev, p, l) => {
     const next = p > 1 ? 1 : (p < 0 ? 0 : p)
 
-    return (prev.toFixed(3) !== next.toFixed(3) && lerp(prev, next, l)) || next
+    return (l !== 1 && prev.toFixed(3) !== next.toFixed(3) && lerp(prev, next, l)) || next
 }
 
-const nextStatus = ({ source, start, length }) => {
+export const nextStatus = ({ source, start, length }) => {
     if (isLesserThan(source, start)) {
         return STATUS.WAITING
     } else if (isInBetween(source, start, start + length)) {
