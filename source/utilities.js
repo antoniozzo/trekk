@@ -5,6 +5,11 @@ export function log(loud, ...args) {
     if (loud) console.log(...args)
 }
 
+export const isLesserThan = (y, v) => y < v
+export const isGreaterThan = (y, v) => y > v
+export const isInBetween = (y, v0, v1) => y >= v0 && y <= v1
+
+
 /**
  * Linear interpolation method.
  * Takes a {start} and {end} value and
@@ -62,7 +67,7 @@ export function getElementTop(element) {
     do {
         top += currentElement.offsetTop || 0
         currentElement = currentElement.offsetParent
-    } while(currentElement)
+    } while (currentElement)
 
     return top
 }

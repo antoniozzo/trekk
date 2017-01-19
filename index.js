@@ -1,10 +1,11 @@
-export scroll from './source/scroll'
-export Trail from './source/Trail'
+import timeline from './source/timeline'
+import core from './source/core'
 
 export * as constants from './source/constants'
 export * as utilities from './source/utilities'
 export * as easings from './source/easings'
 
-export { showGuides, debug, start } from './source'
+const timelines = []
 
-export default from './source'
+export const { addTimeline, fromElement, fromPercentage, fromPixels } = timeline(timelines)
+export default core(timelines)

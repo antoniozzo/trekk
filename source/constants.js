@@ -43,16 +43,16 @@ export const DEFAULTS = {
 export const STATUS = {
     // The Trail has not loaded yet.
     // Will change after calling {trekk.start}
-    LOAD : 'loading',
+    LOADING : 'loading',
 
     // The y scroll position is above the Trail start position
-    IDLE : 'waiting',
+    WAITING : 'waiting',
 
     // The y scroll position is within the Trail start and end position
-    WALK : 'walking',
+    WALKING : 'walking',
 
     // The y scroll position is below the Trail end position
-    DONE : 'finished'
+    FINISHED : 'finished'
 }
 
 /**
