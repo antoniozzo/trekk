@@ -1,10 +1,14 @@
-# :triangular_flag_on_post: trekk [![npm version](https://badge.fury.io/js/trekk.svg)](https://badge.fury.io/js/trekk)
+# :triangular_flag_on_post: trekk [![npm version](https://badge.fury.io/js/trekk.svg)](https://badge.fury.io/js/trekk) [![Coverage Status](https://coveralls.io/repos/github/antoniozzo/trekk/badge.svg?branch=)](https://coveralls.io/github/antoniozzo/trekk?branch=)
 
 ## About
 
 Trekk is a library for making scroll based animations easy-peasy. It gives you a simple interface to setup *trails* (progress based animations) and *stops* (triggered animations). Trekk does NOT give you anything else than values between 0 and 1 to use in your animation states. The animations you create yourself, or use a library like [anime.js](https://github.com/juliangarnier/anime).
 
 ## Install
+
+```html
+<script src="https://unpkg.com/trekk@0.1.0/build/trekk.js"></script>
+```
 
 ```bash
 $ npm install trekk

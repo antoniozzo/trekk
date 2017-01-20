@@ -8,7 +8,8 @@
     "build": "webpack",
     "develop": "webpack --watch",
     "compile": "BABEL_ENV=cjs babel -d lib/ source/",
-    "test": "nyc ava tests --fail-fast --tap | tap-nyan",
+    "test": "nyc ava tests --fail-fast",
+    "test:nyan": "nyc ava tests --fail-fast --tap | tap-nyan",
     "coverage": "nyc report",
     "cover": "npm run test && npm run coverage"
   },
