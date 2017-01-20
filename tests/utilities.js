@@ -27,12 +27,12 @@ test('x is in between v and y', t => {
 })
 
 test('it linear interpolates v0 toward the v1', t => {
-    t.is(lerp(20, 40, .5), 30)
-    t.is(lerp(200, 800, .2), 320)
+    t.is(lerp(20, 40, 0.5), 30)
+    t.is(lerp(200, 800, 0.2), 320)
 })
 
 test('it linear interpolates v0 toward the v1 and rounds', t => {
-    t.is(lerp(200, 800, .19, true), 314)
+    t.is(lerp(200, 800, 0.19, true), 314)
 })
 
 test('it creates array from object', t => {
@@ -65,7 +65,7 @@ test('it removes classes from element', t => {
 
 test('it gets element top value', t => {
     const fakeElement = {
-        offsetTop : 30,
+        offsetTop    : 30,
         offsetParent : {
             offsetTop : 50
         }
@@ -77,22 +77,3 @@ test('it gets element top value', t => {
 test('it returns zero of can not get element top', t => {
     t.is(getElementTop({}), 0)
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
