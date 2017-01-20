@@ -1,99 +1,115 @@
 import { STATUS, STATUS_ARRAY } from './constants'
 
 import {
-    getElementTop,
-    removeClassesFromElement,
-    addClassesToElement
+	getElementTop,
+	removeClassesFromElement,
+	addClassesToElement
 } from './utilities'
 
-const windowY = () => window.pageYOffset || document.documentElement.scrollTop
+import makeReducer from './reducer'
+import makeStore from './store'
+
+// const windowY = () => window.pageYOffset || document.documentElement.scrollTop
 const defaultStart = () => 0
 const defaultLength = () => 0
+const defaultOffset = () => 0
 const defaultModifier = (p, v0, v1) => (p - v0) / v1
 
+const addStatusClassNameToElement = (element, status) => () => {
+	removeClassesFromElement(element, ...STATUS_ARRAY)
+	addClassesToElement(element, status)
+}
+
 const addTimeline = timelines =>
-    options => {
-        const timeline = {
-            options : {
-                source   : windowY,
-                start    : defaultStart,
-                length   : defaultLength,
-                modifier : defaultModifier,
-                ...options
-            },
-            listeners : {
-                [STATUS.LOADING]  : [],
-                [STATUS.WAITING]  : [],
-                [STATUS.WALKING]  : [],
-                [STATUS.FINISHED] : [],
-                progress          : []
-            },
-            on  : (event, listener) => {
-                timeline.listeners[event].push(listener)
+	userOptions => {
+		const options = {
+			start    : defaultStart,
+			length   : defaultLength,
+			offset   : defaultOffset,
+			modifier : defaultModifier,
+			...userOptions
+		}
 
-                return timeline
-            },
-            off : (event, listener) => {
-                const index = timeline.listeners[event].indexOf(listener)
+		const listeners = {
+			[STATUS.LOADING]  : [],
+			[STATUS.WAITING]  : [],
+			[STATUS.WALKING]  : [],
+			[STATUS.FINISHED] : [],
+			progress          : []
+		}
 
-                if (index !== -1) {
-                    timeline.listeners[event].splice(index, 1)
-                }
+		const store = makeStore(makeReducer(options))
 
-                return timeline
-            }
-        }
+		const timeline = {
+			store,
+			options,
+			listeners,
+			on : (event, listener) => {
+				timeline.listeners[event].push(listener)
 
-        timelines.push(timeline)
+				return timeline
+			},
+			off : (event, listener) => {
+				const index = timeline.listeners[event].indexOf(listener)
 
-        return timeline
-    }
+				if (index !== -1) {
+					timeline.listeners[event].splice(index, 1)
+				}
+
+				return timeline
+			}
+		}
+
+		timelines.push(timeline)
+
+		return timeline
+	}
 
 const removeTimeline = timelines =>
-    timeline => {
-        const index = timelines.indexOf(timeline)
+	timeline => {
+		const index = timelines.indexOf(timeline)
 
-        if (index !== -1) {
-            timelines.splice(index, 1)
-        }
-    }
+		if (index !== -1) {
+			timelines.splice(index, 1)
+		}
+	}
 
 const fromElement = timelineCreator =>
-    (element, options) =>
-        timelineCreator({
-            start   : () => getElementTop(element),
-            length  : () => element.offsetHeight,
-            // onState : state => {
-            //     removeClassesFromElement(element, STATUS_ARRAY)
-            //     addClassesToElement(element, state)
-            // },
-            ...options
-        })
+	(element, options) =>
+		timelineCreator({
+			start  : () => getElementTop(element),
+			length : () => element.offsetHeight,
+			...options
+		})
+		.on(STATUS.LOADING, addStatusClassNameToElement(element, STATUS.LOADING))
+		.on(STATUS.WAITING, addStatusClassNameToElement(element, STATUS.WAITING))
+		.on(STATUS.WALKING, addStatusClassNameToElement(element, STATUS.WALKING))
+		.on(STATUS.FINISHED, addStatusClassNameToElement(element, STATUS.FINISHED))
 
 const fromPixels = timelineCreator =>
-    (start, length, options) =>
-        timelineCreator({
-            start  : () => start,
-            length : () => length,
-            ...options
-        })
+	(start, length, options) =>
+		timelineCreator({
+			start  : () => start,
+			length : () => length,
+			...options
+		})
 
 const fromPercentage = timelineCreator =>
-    (timeline, start, length, options) =>
-        timelineCreator({
-            start  : () => timeline.options.start() + (timeline.options.length() * start),
-            length : () => timeline.options.length() * length,
-            ...options
-        })
+	(timeline, start, length, options) =>
+		timelineCreator({
+			start  : () => timeline.options.start() + (timeline.options.length() * start),
+			length : () => timeline.options.length() * length,
+			...options
+		})
 
 export default timelines => {
-    const timelineCreator = addTimeline(timelines)
+	const timelineCreator = addTimeline(timelines)
 
-    return {
-        addTimeline    : timelineCreator,
-        fromPixels     : fromPixels(timelineCreator),
-        fromElement    : fromElement(timelineCreator),
-        fromPercentage : fromPercentage(timelineCreator),
-        removeTimeline : removeTimeline(timelines)
-    }
+	return {
+		addTimeline    : timelineCreator,
+		fromPixels     : fromPixels(timelineCreator),
+		fromElement    : fromElement(timelineCreator),
+		fromPercentage : fromPercentage(timelineCreator),
+		removeTimeline : removeTimeline(timelines)
+	}
 }

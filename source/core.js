@@ -1,29 +1,36 @@
 import raf from 'raf'
-import makeReducer from './reducer'
 
-export default timelines => () => {
-    const reducers = timelines.map(makeReducer)
-    const listeners = timelines.map(t => t.listeners)
-    let state = reducers.map(r => r())
+export const update = (source, { listeners, store }) => {
+	const prevState = store.getState()
+	const nextState = store.reduce(source)
 
-    const next = () => {
-        state = reducers.map((reduce, i) => {
-            const prevState = state[i]
-            const nextState = reduce(prevState)
+	if (prevState.progress !== nextState.progress) {
+		listeners.progress.forEach(listener => listener(nextState.progress))
+	}
 
-            if (prevState.status !== nextState.status) {
-                listeners[i][nextState.status].forEach(listener => listener())
-            }
+	if (prevState.status !== nextState.status) {
+		listeners[nextState.status].forEach(listener => listener())
+	}
+}
 
-            if (prevState.progress !== nextState.progress) {
-                listeners[i].progress.forEach(listener => listener(nextState.progress))
-            }
+const defaultOptions = {
+	source  : () => (window.pageYOffset || document.documentElement.scrollTop) + (window.innerHeight / 2),
+	iterate : raf
+}
 
-            return nextState
-        })
+export default timelines => userOptons => {
+	const options = {
+		...defaultOptions,
+		...userOptons
+	}
 
-        raf(next)
-    }
+	const next = () => {
+		const source = options.source()
 
-    raf(next)
+		timelines.forEach(t => update(source, t))
+
+		options.iterate(next)
+	}
+
+	options.iterate(next)
 }
