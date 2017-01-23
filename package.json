@@ -55,7 +55,7 @@
   },
   "eslintConfig" : {
     "parser": "babel-eslint",
-    "extends": ["xo/browser", "airbnb-base"],
+    "extends": ["airbnb-base"],
     "env": {
       "browser": true,
       "node": true,
