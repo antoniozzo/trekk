@@ -5,7 +5,7 @@
   "main": "build/trekk.js",
   "module": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack && webpack --env=prod",
     "develop": "nyc ava --fail-fast --watch",
     "compile": "BABEL_ENV=cjs babel -d lib/ source/",
     "lint": "./node_modules/.bin/eslint ./",

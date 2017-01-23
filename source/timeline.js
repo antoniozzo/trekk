@@ -8,26 +8,57 @@ import {
 
 import makeReducer from './reducer'
 import makeStore from './store'
+import makeCache from './cache'
+import easings from './easings'
 
-// const windowY = () => window.pageYOffset || document.documentElement.scrollTop
-const defaultStart = () => 0
-const defaultLength = () => 0
-const defaultOffset = () => 0
-const defaultModifier = (p, v0, v1) => (p - v0) / v1
+/**
+ * Default option functions
+ */
+export const defaultStart = () => 0
+export const defaultLength = () => 0
+export const defaultOffset = () => 0
+export const defaultModifier = (p, v0, v1) => {
+	const progress = (p - v0) / v1
 
-const addStatusClassNameToElement = (element, status) => () => {
+	if (progress >= 1) return 1
+	if (progress <= 0) return 0
+
+	return progress
+}
+
+/**
+ * Removes all status classNames from element
+ * and adds {status} as className
+ */
+export const addStatusClassNameToElement = (element, status) => () => {
 	removeClassesFromElement(element, ...STATUS_ARRAY)
 	addClassesToElement(element, status)
 }
 
+/**
+ * Add a timeline to the collection.
+ * options:
+ * 	color - guideline color
+ * 	label - guideline label
+ * 	start - function to get start of timeline
+ * 	length - function to get length of timeline
+ * 	offset - function to offset the start and length values
+ * 	modifier - function to return the progress based on {start}, {length} and {source}
+ * 	lerp - linear interpolation factor between the previous progress and the next
+ * 	ease - easing function
+ */
 const addTimeline = timelines =>
 	userOptions => {
 		const options = {
+			color    : 'green',
+			label    : 'Undefined',
 			start    : defaultStart,
 			length   : defaultLength,
 			offset   : defaultOffset,
 			modifier : defaultModifier,
-			...userOptions
+			lerp     : 1,
+			...userOptions,
+			ease     : (userOptions.ease && easings[userOptions.ease]) || userOptions.ease || easings.linear
 		}
 
 		const listeners = {
@@ -38,33 +69,43 @@ const addTimeline = timelines =>
 			progress          : []
 		}
 
-		const store = makeStore(makeReducer(options))
+		const start = makeCache(() => options.start() + options.offset())
+		const length = makeCache(() => options.length() - (options.offset() * 2))
 
-		const timeline = {
-			store,
-			options,
-			listeners,
-			on : (event, listener) => {
-				timeline.listeners[event].push(listener)
+		const on = (event, listener) => {
+			timeline.listeners[event].push(listener)
 
-				return timeline
-			},
-			off : (event, listener) => {
-				const index = timeline.listeners[event].indexOf(listener)
-
-				if (index !== -1) {
-					timeline.listeners[event].splice(index, 1)
-				}
-
-				return timeline
-			}
+			return timeline
 		}
 
+		const off = (event, listener) => {
+			const index = timeline.listeners[event].indexOf(listener)
+
+			if (index !== -1) {
+				timeline.listeners[event].splice(index, 1)
+			}
+
+			return timeline
+		}
+
+		const timeline = {
+			options,
+			listeners,
+			start,
+			length,
+			on,
+			off
+		}
+
+		timeline.store = makeStore(makeReducer(timeline))
 		timelines.push(timeline)
 
 		return timeline
 	}
 
+/**
+ * Remove a {timeline} from the collection
+ */
 const removeTimeline = timelines =>
 	timeline => {
 		const index = timelines.indexOf(timeline)
@@ -74,6 +115,11 @@ const removeTimeline = timelines =>
 		}
 	}
 
+/**
+ * Creates a timeline from an element
+ * The {start} and {length} will be calculated based
+ * on the elements position
+ */
 const fromElement = timelineCreator =>
 	(element, options) =>
 		timelineCreator({
@@ -86,6 +132,10 @@ const fromElement = timelineCreator =>
 		.on(STATUS.WALKING, addStatusClassNameToElement(element, STATUS.WALKING))
 		.on(STATUS.FINISHED, addStatusClassNameToElement(element, STATUS.FINISHED))
 
+/**
+ * Creates a timeline from pixel values
+ * The {start} and {length} needs to be in pixels
+ */
 const fromPixels = timelineCreator =>
 	(start, length, options) =>
 		timelineCreator({
@@ -94,11 +144,15 @@ const fromPixels = timelineCreator =>
 			...options
 		})
 
+/**
+ * Creates a timeline from percentage values
+ * The {start} and {length} will be based on {timeline}'s
+ */
 const fromPercentage = timelineCreator =>
 	(timeline, start, length, options) =>
 		timelineCreator({
-			start  : () => timeline.options.start() + (timeline.options.length() * start),
-			length : () => timeline.options.length() * length,
+			start  : () => timeline.start() + (timeline.length() * start),
+			length : () => timeline.length() * length,
 			...options
 		})
 

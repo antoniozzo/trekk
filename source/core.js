@@ -1,9 +1,4 @@
-import raf from 'raf'
-
-export const update = (source, { listeners, store }) => {
-	const prevState = store.getState()
-	const nextState = store.reduce(source)
-
+export const broadcast = ({ listeners, prevState, nextState }) => {
 	if (prevState.progress !== nextState.progress) {
 		listeners.progress.forEach(listener => listener(nextState.progress))
 	}
@@ -13,21 +8,20 @@ export const update = (source, { listeners, store }) => {
 	}
 }
 
-const defaultOptions = {
-	source  : () => (window.pageYOffset || document.documentElement.scrollTop) + (window.innerHeight / 2),
-	iterate : raf
+export const update = ({ listeners, store, options }, source) => {
+	const prevState = store.getState()
+	const nextState = store.reduce(source)
+
+	broadcast({ listeners, prevState, nextState })
+
+	return nextState
 }
 
-export default timelines => userOptons => {
-	const options = {
-		...defaultOptions,
-		...userOptons
-	}
-
+export default (timelines, options) => {
 	const next = () => {
 		const source = options.source()
 
-		timelines.forEach(t => update(source, t))
+		timelines.forEach(t => update(t, source))
 
 		options.iterate(next)
 	}

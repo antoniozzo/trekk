@@ -1,10 +1,11 @@
 const path = require('path')
+const webpack = require('webpack')
 
-module.exports = {
+module.exports = env => ({
 	entry  : './index.js',
 	output : {
 		path           : path.join(__dirname, 'build'),
-		filename       : 'trekk.js',
+		filename       : (env !== 'prod' && 'trekk.js') || 'trekk.min.js',
 		publicPath     : 'build/',
 		library        : 'trekk',
 		libraryTarget  : 'umd',
@@ -19,5 +20,8 @@ module.exports = {
 			}
 		]
 	},
+	plugins : (env !== 'prod' && []) || [
+		new webpack.optimize.UglifyJsPlugin()
+	],
 	target : 'node'
-}
+})

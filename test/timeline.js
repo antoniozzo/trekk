@@ -112,3 +112,25 @@ test('it only removes event listener from timeline if it can find it', t => {
 	timeline.off('progress', fn2)
 	t.is(timeline.listeners.progress.length, 1)
 })
+
+test('it sets classes of timeline created from element', t => {
+	const timelines = []
+	const { fromElement } = timelineService(timelines)
+
+	const fakeElement = {
+		offsetTop    : 50,
+		offsetHeight : 500,
+		classList    : {
+			remove : className => {
+				t.is(className, 'loading')
+			},
+			add : className => {
+				t.is(className, 'waiting')
+			}
+		}
+	}
+
+	const timeline = fromElement(fakeElement, fakeOptions)
+
+	timeline.listeners.waiting[0]()
+})

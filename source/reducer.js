@@ -7,18 +7,22 @@ import {
 	isInBetween
 } from './utilities'
 
-export const nextProgress = (prev, p, l) => {
-	const next = p > 1 ? 1 : (p < 0 ? 0 : p)
+export const nextProgress = ({ options, start, length }, state, source) => {
+	let progress = options.ease(options.modifier(source, start(), length()))
 
-	return (l !== 1 && prev.toFixed(3) !== next.toFixed(3) && lerp(prev, next, l)) || next
+	if (options.lerp && state.progress.toFixed(3) !== progress.toFixed(3)) {
+		progress = lerp(state.progress, progress, options.lerp)
+	}
+
+	return progress
 }
 
-export const nextStatus = ({ source, start, length }) => {
-	if (isLesserThan(source, start)) {
+export const nextStatus = ({ start, length }, source) => {
+	if (isLesserThan(source, start())) {
 		return STATUS.WAITING
-	} else if (isInBetween(source, start, start + length)) {
+	} else if (isInBetween(source, start(), start() + length())) {
 		return STATUS.WALKING
-	} else if (isGreaterThan(source, start + length)) {
+	} else if (isGreaterThan(source, start() + length())) {
 		return STATUS.FINISHED
 	}
 
@@ -30,19 +34,12 @@ const initialState = {
 	progress : -1
 }
 
-export default options => (state = initialState, source) => {
+export default timeline => (state = initialState, source) => {
 	if (source) {
-		const offset = options.offset()
-		const start = options.start() + offset
-		const length = options.length() - (offset * 2)
-		const status = nextStatus({ source, start, length })
-		const progress = nextProgress(
-			state.progress,
-			options.modifier(source, start, length),
-			options.lerp
-		)
-
-		return { status, progress }
+		return {
+			status   : nextStatus(timeline, source),
+			progress : nextProgress(timeline, state, source)
+		}
 	}
 
 	return state

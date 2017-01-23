@@ -19,26 +19,31 @@ $ npm install trekk
 ### commonJS
 ```js
   var trekk = require('trekk');
+
+  // Define your timelines...
+
+  trekk() // Start
 ```
 
 ### ES6
 ```js
-  import trekk from 'trekk';
+  import trekk, { /* API methods */ } from 'trekk';
+
+  // Define your timelines...
+
+  trekk() // Start
 ```
 
 ## API
 
-### trekk(path, onProgress, options)
+### fromElement(element, options)
 
 | Param | Default | Type
 | --- | --- | ---
-| path | `undefined` | `node`, `array` (`[start, end]`)
-| onProgress | `undefined` | `function(progress)`
+| element | `undefined` | `node`
 | options | *See [Options](#options)* | *See [Options](#options)*
 
-Call `trekk` to create your first "timeline".
-Pass an array (example: `[200, 400]`) or element as `path` for the start and end position.
-Trekk will feed `onProgress` with a value from 0 to 1 that represent the current progress within `path`.
+Create a timeline from an elements start position and height.
 
 Example
 ```js
@@ -48,20 +53,19 @@ const fadeInHeader = progress => {
 	header.style.opacity = progress
 }
 
-trekk(header, fadeInHeader)
+fromElement(header)
+	.on('progress', fadeInHeader)
 ```
 
-### *trekk.*trail(path, onProgress, options)
+### fromPixels(start, length, options)
 
 | Param | Default | Type
 | --- | --- | ---
-| path | `undefined` | `node`, `array` (`[0, 0]`)
-| onProgress | `undefined` | `function(progress)`
+| start | 0 | `number`
+| length | 0 | `number`
 | options | *See [Options](#options)* | *See [Options](#options)*
 
-Call `trail` after `trekk` to create a nested "timeline".
-Pass an array (example: `[200, 400]`, `[0.2, 0.4]`) or element as `path` for the start and end position.
-If `path` is an array, the start and end positions will be relative to that of the parent `trekk`.
+Create a timeline from start and length in pixels.
 
 Example
 ```js
@@ -73,21 +77,21 @@ const slideInTitle = progress => {
 	title.style.transform = `translateX(${100 * progress})`
 }
 
-trekk(header, fadeInHeader)
-	.trail(title, slideInTitle)
+fromPixels(100, 200)
+	.on('progress', slideInTitle)
 ```
 
-### *trekk.*stop(position, onProgress, options)
+### fromPercentage(timeline, start, length, options)
 
 | Param | Default | Type
 | --- | --- | ---
-| position | `undefined` | `node`, `int`, `float`
-| onProgress | `undefined` | `function(progress)`
+| timeline | `undefined` | `object` *existing timeline*
+| start | `undefined` | `float`
+| length | `undefined` | `float`
 | options | *See [Options](#options)* | *See [Options](#options)*
 
-Call `stop` after `trekk` to create a nested "one-time" animation.
-Pass an int (example: `200`), float (example: `0.2`) or element as `path` for the position.
-If `path` is an int or float, the position will be relative to that of the parent `trekk`.
+Create a timeline from start and length in percentage.
+The percentage values are applied on the reference `timeline` you supply.
 
 Example
 ```js
@@ -99,25 +103,38 @@ const rotateIcon = progress => {
 	icon.style.transform = `rotate(${360 * progress}deg)`
 }
 
-trekk(header, fadeInHeader)
-	.trail(title, slideInTitle)
-	.stop(icon, rotateIcon)
+const headerTimeline = fromElement(header)
+	.on('progress', fadeInHeader)
+
+fromPercentage(headerTimeline, 0.2, 0)
+	.on('progress', rotateIcon)
 ```
 
 ## Options
 
 | Param | Default | Type | Description
 | --- | --- | --- | ---
-| label | "Undefined Trail" | `string` | Used as a label when debugging.
-| offset | 0 | `integer` | Offset in pixels to subtract from the path start and end position.
-| ease | "linear" | `string`, `function(progress)` | Easing function to run before calling `onProgress`. See [Easings](#easings) for supported strings, or pass your own easing function.
-| lerp | 1 | `number` | Smooth the progress given to `onProgress` with some linear interpolation. Takes a value from 0 to 1.
-| log | false | `boolean` | Log each state if a trail to the console.
-| onWaiting | `undefined` | `function` | Called once when the y scroll position is above the trail start position.
-| onWalking | `undefined` | `function` | Called once when the y scroll position is within the trail start and end position.
-| onFinished | `undefined` | `function` | Called once when the y scroll position is below the trail end position.
+| color | "green" | `string` | Used as the color of the guidelines when debugging.
+| label | "Undefined" | `string` | Used as a label when debugging.
+| start | 0 | `function` | Function that returns start position of timeline (in pixels).
+| length | 0 | `function` | Function that returns length of timeline (in pixels).
+| offset | 0 | `function` | Function that returns offset of timeline (in pixels).
+| modifier | (p - v0) / v1 | `function` | Function given a source value, calculates the progress in between the start and length value.
+| ease | "linear" | `string`, `function(progress)` | Easing function to run before progress is broadcasted. See [Easings](#easings) for supported strings, or pass your own easing function.
+| lerp | 1 | `number` | Smooth the progress over time with some linear interpolation. Takes a value from 0 to 1.
 
-### Easings
+## Events
+
+Use `timeline.on()` to subscribe to events.
+
+| Event | Description
+| --- | ---
+| waiting | Called once when the y scroll position is above the trail start position.
+| walking | Called once when the y scroll position is within the trail start and end position.
+| finished | Called once when the y scroll position is below the trail end position.
+| progress | Called every progress update with the current progress.
+
+## Easings
 
 ```js
 // linear

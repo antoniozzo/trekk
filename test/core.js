@@ -1,54 +1,52 @@
 import test from 'ava'
 
-import makeCore, { update } from '../source/core'
+import makeStore from '../source/store'
+import core, { update } from '../source/core'
 
 test('it updates state', t => {
 	const nextState = update({
-		reduce : state => state * 2,
-		state  : 2
-	})
+		store : makeStore(state => (state && state * 2) || 2)
+	}, 0)
 
 	t.is(nextState, 4)
 })
 
 test.cb('it notifies listeners on status change', t => {
 	update({
-		reduce    : () => ({ status : 'bar' }),
-		state     : { status : 'foo' },
+		store : makeStore(state => ({
+			status : state ? 'bar' : 'foo'
+		})),
 		listeners : {
 			bar : [() => t.end()]
 		}
-	})
+	}, 0)
 })
 
 test.cb('it notifies listeners on progress change', t => {
 	update({
-		reduce    : () => ({ progress : 1 }),
-		state     : { progress : 0 },
+		store : makeStore(state => ({
+			progress : state ? 1 : 0
+		})),
 		listeners : {
 			progress : [p => {
 				t.is(p, 1)
 				t.end()
 			}]
 		}
-	})
-})
-
-test('it makes a core function', t => {
-	const core = makeCore([])
-
-	t.is(typeof core, 'function')
+	}, 0)
 })
 
 test('it iterates', t => {
-	const core = makeCore([])
-
 	let iterations = 0
-	core(next => {
-		iterations += 1
 
-		if (iterations < 3) {
-			next()
+	core([], {
+		source  : () => 0,
+		iterate : next => {
+			iterations += 1
+
+			if (iterations < 3) {
+				next()
+			}
 		}
 	})
 

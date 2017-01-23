@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "build/";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,23 +86,34 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.isLesserThan = isLesserThan;
+exports.isGreaterThan = isGreaterThan;
+exports.isInBetween = isInBetween;
 exports.lerp = lerp;
 exports.objectToArray = objectToArray;
 exports.removeClassesFromElement = removeClassesFromElement;
 exports.addClassesToElement = addClassesToElement;
 exports.getElementTop = getElementTop;
 /**
- * Log next arguments if {loud} is true
+ * Test if {y} is lesser than {v}
  */
-var isLesserThan = exports.isLesserThan = function isLesserThan(y, v) {
+function isLesserThan(y, v) {
   return y < v;
-};
-var isGreaterThan = exports.isGreaterThan = function isGreaterThan(y, v) {
+}
+
+/**
+ * Test if {y} is greater than {v}
+ */
+function isGreaterThan(y, v) {
   return y > v;
-};
-var isInBetween = exports.isInBetween = function isInBetween(y, v0, v1) {
+}
+
+/**
+ * Test if {y} is greater than {v0} and lesser than {v1}
+ */
+function isInBetween(y, v0, v1) {
   return y >= v0 && y <= v1;
-};
+}
 
 /**
  * Linear interpolation method.
@@ -166,81 +177,6 @@ function getElementTop(element) {
   return top;
 }
 
-/**
- * Create a guideline
- */
-// export function addGuide(pos, col = 0) {
-//     const guide = document.createElement('div')
-//     const label = document.createElement('span')
-//     const line = document.createElement('div')
-
-//     guide.style.zIndex = 999
-//     guide.style.width = '100%'
-//     guide.style.position = 'absolute'
-//     guide.style.top = `${pos}px`
-//     guide.style.left = 0
-
-//     label.style.borderWidth = 0
-//     label.style.borderStyle = 'dashed'
-//     label.style.position = 'absolute'
-//     label.style.margin = '2px 5px'
-
-//     document.body.appendChild(guide)
-
-//     return {
-//         color(value) {
-//             // guide.style.borderTopColor = value
-//             line.style.borderLeftColor = value
-//             label.style.color = value
-//             label.style.borderColor = value
-
-//             return this
-//         },
-//         fixed() {
-//             guide.style.position = 'fixed'
-
-//             return this
-//         },
-//         label(text, top) {
-//             label.innerHTML = text
-
-//             guide.appendChild(label)
-
-//             if (top) {
-//                 label.style.bottom = 0
-//                 label.style.borderBottomWidth = '1px'
-//             } else {
-//                 label.style.top = 0
-//                 label.style.borderTopWidth = '1px'
-//             }
-
-//             return this
-//         },
-//         col(i) {
-//             guide.style.left = `${20 * i}px`
-
-//             return this
-//         },
-//         width(w) {
-//             label.style.width = w
-
-//             return this
-//         },
-//         line(h) {
-//             line.style.borderLeft = '1px dashed green'
-//             line.style.position = 'absolute'
-//             line.style.top = 0
-//             line.style.left = 0
-//             line.style.width = '1px'
-//             line.style.height = `${h}px`
-
-//             guide.appendChild(line)
-
-//             return this
-//         }
-//     }
-// }
-
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -249,76 +185,34 @@ function getElementTop(element) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.TRAILS = exports.STATUS_ARRAY = exports.STATUS = exports.DEFAULTS = undefined;
+exports.STATUS_ARRAY = exports.STATUS = undefined;
 
 var _utilities = __webpack_require__(0);
-
-/**
- * Default Trail options
- */
-var DEFAULTS = exports.DEFAULTS = {
-  // Label used in guidelines
-  label: 'Undefined Trail',
-
-  // Offset the start and end position
-  offset: 0,
-
-  // Easing of the Trail progress, supports strings:
-  //
-  // linear
-  // easeInQuad
-  // easeOutQuad
-  // easeInOutQuad
-  // easeInCubic
-  // easeOutCubic
-  // easeInOutCubic
-  // easeInQuart
-  // easeOutQuart
-  // easeInOutQuart
-  // easeInQuint
-  // easeOutQuint
-  // easeInOutQuint
-  //
-  // or a custom easing function(progress) {}
-  ease: 'linear',
-
-  // Linear interpolation value, from 0..1
-  // used to "delay" progress
-  lerp: 1,
-
-  // Activate debug logs for the Trail
-  log: false
-};
 
 /**
  * All available Trail statuses
  */
 var STATUS = exports.STATUS = {
-  // The Trail has not loaded yet.
-  // Will change after calling {trekk.start}
-  LOADING: 'loading',
+	// The Trail has not loaded yet.
+	// Will change after calling {trekk.start}
+	LOADING: 'loading',
 
-  // The y scroll position is above the Trail start position
-  WAITING: 'waiting',
+	// The y scroll position is above the Trail start position
+	WAITING: 'waiting',
 
-  // The y scroll position is within the Trail start and end position
-  WALKING: 'walking',
+	// The y scroll position is within the Trail start and end position
+	WALKING: 'walking',
 
-  // The y scroll position is below the Trail end position
-  FINISHED: 'finished'
+	// The y scroll position is below the Trail end position
+	FINISHED: 'finished'
 };
 
 /**
  * All Trail statuses as an array
  */
 var STATUS_ARRAY = exports.STATUS_ARRAY = (0, _utilities.objectToArray)(STATUS);
-
-/**
- * Will hold all the instances of Trail
- */
-var TRAILS = exports.TRAILS = [];
 
 /***/ }),
 /* 2 */
@@ -328,52 +222,80 @@ var TRAILS = exports.TRAILS = [];
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
-exports.update = undefined;
+/**
+ * Easing Functions
+ * https://gist.github.com/gre/1650294
+ */
+var easings = {
+	// no easing, no acceleration
+	linear: function linear(t) {
+		return t;
+	},
 
-var _raf = __webpack_require__(7);
+	// accelerating from zero velocity
+	easeInQuad: function easeInQuad(t) {
+		return t * t;
+	},
 
-var _raf2 = _interopRequireDefault(_raf);
+	// decelerating to zero velocity
+	easeOutQuad: function easeOutQuad(t) {
+		return t * (2 - t);
+	},
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	// acceleration until halfway, then deceleration
+	easeInOutQuad: function easeInOutQuad(t) {
+		return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+	},
 
-var update = exports.update = function update(_ref) {
-    var reduce = _ref.reduce,
-        listeners = _ref.listeners,
-        state = _ref.state;
+	// accelerating from zero velocity
+	easeInCubic: function easeInCubic(t) {
+		return t * t * t;
+	},
 
-    var nextState = reduce(state);
+	// decelerating to zero velocity
+	easeOutCubic: function easeOutCubic(t) {
+		return --t * t * t + 1;
+	},
 
-    if (state.status !== nextState.status) {
-        listeners[nextState.status].forEach(function (listener) {
-            return listener();
-        });
-    }
+	// acceleration until halfway, then deceleration
+	easeInOutCubic: function easeInOutCubic(t) {
+		return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+	},
 
-    if (state.progress !== nextState.progress) {
-        listeners.progress.forEach(function (listener) {
-            return listener(nextState.progress);
-        });
-    }
+	// accelerating from zero velocity
+	easeInQuart: function easeInQuart(t) {
+		return t * t * t * t;
+	},
 
-    state = nextState;
-    return nextState;
+	// decelerating to zero velocity
+	easeOutQuart: function easeOutQuart(t) {
+		return 1 - --t * t * t * t;
+	},
+
+	// acceleration until halfway, then deceleration
+	easeInOutQuart: function easeInOutQuart(t) {
+		return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t;
+	},
+
+	// accelerating from zero velocity
+	easeInQuint: function easeInQuint(t) {
+		return t * t * t * t * t;
+	},
+
+	// decelerating to zero velocity
+	easeOutQuint: function easeOutQuint(t) {
+		return 1 + --t * t * t * t * t;
+	},
+
+	// acceleration until halfway, then deceleration
+	easeInOutQuint: function easeInOutQuint(t) {
+		return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
+	}
 };
 
-exports.default = function (timelines) {
-    return function () {
-        var iterate = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _raf2.default;
-
-        var next = function next() {
-            timelines.forEach(update);
-
-            iterate(next);
-        };
-
-        iterate(next);
-    };
-};
+exports.default = easings;
 
 /***/ }),
 /* 3 */
@@ -383,80 +305,52 @@ exports.default = function (timelines) {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
-/**
- * Easing Functions
- * https://gist.github.com/gre/1650294
- */
-var easings = {
-    // no easing, no acceleration
-    linear: function linear(t) {
-        return t;
-    },
+var broadcast = exports.broadcast = function broadcast(_ref) {
+	var listeners = _ref.listeners,
+	    prevState = _ref.prevState,
+	    nextState = _ref.nextState;
 
-    // accelerating from zero velocity
-    easeInQuad: function easeInQuad(t) {
-        return t * t;
-    },
+	if (prevState.progress !== nextState.progress) {
+		listeners.progress.forEach(function (listener) {
+			return listener(nextState.progress);
+		});
+	}
 
-    // decelerating to zero velocity
-    easeOutQuad: function easeOutQuad(t) {
-        return t * (2 - t);
-    },
-
-    // acceleration until halfway, then deceleration
-    easeInOutQuad: function easeInOutQuad(t) {
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-    },
-
-    // accelerating from zero velocity
-    easeInCubic: function easeInCubic(t) {
-        return t * t * t;
-    },
-
-    // decelerating to zero velocity
-    easeOutCubic: function easeOutCubic(t) {
-        return --t * t * t + 1;
-    },
-
-    // acceleration until halfway, then deceleration
-    easeInOutCubic: function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-    },
-
-    // accelerating from zero velocity
-    easeInQuart: function easeInQuart(t) {
-        return t * t * t * t;
-    },
-
-    // decelerating to zero velocity
-    easeOutQuart: function easeOutQuart(t) {
-        return 1 - --t * t * t * t;
-    },
-
-    // acceleration until halfway, then deceleration
-    easeInOutQuart: function easeInOutQuart(t) {
-        return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t;
-    },
-
-    // accelerating from zero velocity
-    easeInQuint: function easeInQuint(t) {
-        return t * t * t * t * t;
-    },
-
-    // decelerating to zero velocity
-    easeOutQuint: function easeOutQuint(t) {
-        return 1 + --t * t * t * t * t;
-    },
-
-    // acceleration until halfway, then deceleration
-    easeInOutQuint: function easeInOutQuint(t) {
-        return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t;
-    }
+	if (prevState.status !== nextState.status) {
+		listeners[nextState.status].forEach(function (listener) {
+			return listener();
+		});
+	}
 };
 
-exports.default = easings;
+var update = exports.update = function update(_ref2, source) {
+	var listeners = _ref2.listeners,
+	    store = _ref2.store,
+	    options = _ref2.options;
+
+	var prevState = store.getState();
+	var nextState = store.reduce(source);
+
+	broadcast({ listeners: listeners, prevState: prevState, nextState: nextState });
+
+	return nextState;
+};
+
+exports.default = function (timelines, options) {
+	var next = function next() {
+		var source = options.source();
+
+		timelines.forEach(function (t) {
+			return update(t, source);
+		});
+
+		options.iterate(next);
+	};
+
+	options.iterate(next);
+};
 
 /***/ }),
 /* 4 */
@@ -466,138 +360,109 @@ exports.default = easings;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
+exports.makeGuide = makeGuide;
+function makeGuide(pos) {
+	var guide = document.createElement('div');
+	var _label = document.createElement('span');
+	var _line = document.createElement('div');
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	guide.style.zIndex = 999;
+	guide.style.width = '100%';
+	guide.style.position = 'absolute';
+	guide.style.top = pos + 'px';
+	guide.style.left = 0;
 
-var _constants = __webpack_require__(1);
+	_label.style.borderWidth = 0;
+	_label.style.borderStyle = 'dashed';
+	_label.style.position = 'absolute';
+	_label.style.padding = '2px 5px';
 
-var _utilities = __webpack_require__(0);
+	document.body.appendChild(guide);
 
-var _reducer = __webpack_require__(5);
+	return {
+		remove: function remove() {
+			document.body.removeChild(guide);
 
-var _reducer2 = _interopRequireDefault(_reducer);
+			return this;
+		},
+		color: function color(value) {
+			// guide.style.borderTopColor = value
+			_line.style.borderLeftColor = value;
+			_label.style.color = value;
+			_label.style.borderColor = value;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+			return this;
+		},
+		fixed: function fixed() {
+			guide.style.position = 'fixed';
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+			return this;
+		},
+		label: function label(text, top) {
+			_label.innerHTML = text;
 
-var windowY = function windowY() {
-    return window.pageYOffset || document.documentElement.scrollTop;
-};
-var defaultStart = function defaultStart() {
-    return 0;
-};
-var defaultLength = function defaultLength() {
-    return 0;
-};
-var defaultModifier = function defaultModifier(p, v0, v1) {
-    return (p - v0) / v1;
-};
+			guide.appendChild(_label);
 
-var addTimeline = function addTimeline(timelines) {
-    return function (userOptions) {
-        var _listeners;
+			if (top) {
+				_label.style.bottom = 0;
+				_label.style.borderBottomWidth = '1px';
+			} else {
+				_label.style.top = 0;
+				_label.style.borderTopWidth = '1px';
+			}
 
-        var options = _extends({
-            source: windowY,
-            start: defaultStart,
-            length: defaultLength,
-            modifier: defaultModifier
-        }, userOptions);
+			return this;
+		},
+		col: function col(i) {
+			guide.style.left = 20 * i + 'px';
 
-        var listeners = (_listeners = {}, _defineProperty(_listeners, _constants.STATUS.LOADING, []), _defineProperty(_listeners, _constants.STATUS.WAITING, []), _defineProperty(_listeners, _constants.STATUS.WALKING, []), _defineProperty(_listeners, _constants.STATUS.FINISHED, []), _defineProperty(_listeners, 'progress', []), _listeners);
+			return this;
+		},
+		width: function width(w) {
+			_label.style.width = w;
 
-        var reduce = (0, _reducer2.default)(options);
-        var state = reduce();
+			return this;
+		},
+		line: function line(h) {
+			_line.style.borderLeft = '1px dashed green';
+			_line.style.position = 'absolute';
+			_line.style.top = 0;
+			_line.style.left = 0;
+			_line.style.width = '1px';
+			_line.style.height = h + 'px';
 
-        var timeline = {
-            options: options,
-            listeners: listeners,
-            reduce: reduce,
-            state: state,
-            on: function on(event, listener) {
-                timeline.listeners[event].push(listener);
+			guide.appendChild(_line);
 
-                return timeline;
-            },
-            off: function off(event, listener) {
-                var index = timeline.listeners[event].indexOf(listener);
+			return this;
+		}
+	};
+}
 
-                if (index !== -1) {
-                    timeline.listeners[event].splice(index, 1);
-                }
+exports.default = function (timelines, options) {
+	var guides = [];
 
-                return timeline;
-            }
-        };
+	var draw = function draw() {
+		guides.forEach(function (guide) {
+			return guide.remove();
+		});
+		guides = [];
 
-        timelines.push(timeline);
+		timelines.forEach(function (t) {
+			var start = t.options.start() + t.options.offset();
+			var end = t.options.start() + t.options.length() - t.options.offset();
 
-        return timeline;
-    };
-};
+			guides.push(makeGuide(start).color(t.options.color).label(t.options.label));
 
-var removeTimeline = function removeTimeline(timelines) {
-    return function (timeline) {
-        var index = timelines.indexOf(timeline);
+			guides.push(makeGuide(end).color(t.options.color).label(t.options.label, true));
+		});
 
-        if (index !== -1) {
-            timelines.splice(index, 1);
-        }
-    };
-};
+		guides.push(makeGuide(options.source()).color('red').width('100%').label('').fixed());
+	};
 
-var fromElement = function fromElement(timelineCreator) {
-    return function (element, options) {
-        return timelineCreator(_extends({
-            start: function start() {
-                return (0, _utilities.getElementTop)(element);
-            },
-            length: function length() {
-                return element.offsetHeight;
-            }
-        }, options));
-    };
-};
-
-var fromPixels = function fromPixels(timelineCreator) {
-    return function (_start, _length, options) {
-        return timelineCreator(_extends({
-            start: function start() {
-                return _start;
-            },
-            length: function length() {
-                return _length;
-            }
-        }, options));
-    };
-};
-
-var fromPercentage = function fromPercentage(timelineCreator) {
-    return function (timeline, _start2, _length2, options) {
-        return timelineCreator(_extends({
-            start: function start() {
-                return timeline.options.start() + timeline.options.length() * _start2;
-            },
-            length: function length() {
-                return timeline.options.length() * _length2;
-            }
-        }, options));
-    };
-};
-
-exports.default = function (timelines) {
-    var timelineCreator = addTimeline(timelines);
-
-    return {
-        addTimeline: timelineCreator,
-        fromPixels: fromPixels(timelineCreator),
-        fromElement: fromElement(timelineCreator),
-        fromPercentage: fromPercentage(timelineCreator),
-        removeTimeline: removeTimeline(timelines)
-    };
+	window.addEventListener('resize', draw);
+	draw();
 };
 
 /***/ }),
@@ -608,98 +473,221 @@ exports.default = function (timelines) {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
-exports.nextStatus = exports.nextProgress = undefined;
+exports.addStatusClassNameToElement = exports.defaultModifier = exports.defaultOffset = exports.defaultLength = exports.defaultStart = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _constants = __webpack_require__(1);
 
 var _utilities = __webpack_require__(0);
 
-var nextProgress = exports.nextProgress = function nextProgress(prev, p, l) {
-    var next = p > 1 ? 1 : p < 0 ? 0 : p;
+var _reducer = __webpack_require__(8);
 
-    return l !== 1 && prev.toFixed(3) !== next.toFixed(3) && (0, _utilities.lerp)(prev, next, l) || next;
+var _reducer2 = _interopRequireDefault(_reducer);
+
+var _store = __webpack_require__(9);
+
+var _store2 = _interopRequireDefault(_store);
+
+var _cache = __webpack_require__(7);
+
+var _cache2 = _interopRequireDefault(_cache);
+
+var _easings = __webpack_require__(2);
+
+var _easings2 = _interopRequireDefault(_easings);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Default option functions
+ */
+var defaultStart = exports.defaultStart = function defaultStart() {
+	return 0;
+};
+var defaultLength = exports.defaultLength = function defaultLength() {
+	return 0;
+};
+var defaultOffset = exports.defaultOffset = function defaultOffset() {
+	return 0;
+};
+var defaultModifier = exports.defaultModifier = function defaultModifier(p, v0, v1) {
+	var progress = (p - v0) / v1;
+
+	if (progress >= 1) return 1;
+	if (progress <= 0) return 0;
+
+	return progress;
 };
 
-var nextStatus = exports.nextStatus = function nextStatus(_ref) {
-    var source = _ref.source,
-        start = _ref.start,
-        length = _ref.length;
-
-    if ((0, _utilities.isLesserThan)(source, start)) {
-        return _constants.STATUS.WAITING;
-    } else if ((0, _utilities.isInBetween)(source, start, start + length)) {
-        return _constants.STATUS.WALKING;
-    } else if ((0, _utilities.isGreaterThan)(source, start + length)) {
-        return _constants.STATUS.FINISHED;
-    }
-
-    return _constants.STATUS.LOADING;
+/**
+ * Removes all status classNames from element
+ * and adds {status} as className
+ */
+var addStatusClassNameToElement = exports.addStatusClassNameToElement = function addStatusClassNameToElement(element, status) {
+	return function () {
+		_utilities.removeClassesFromElement.apply(undefined, [element].concat(_toConsumableArray(_constants.STATUS_ARRAY)));
+		(0, _utilities.addClassesToElement)(element, status);
+	};
 };
 
-var initialState = {
-    status: _constants.STATUS.LOADING,
-    progress: 0
+/**
+ * Add a timeline to the collection.
+ * options:
+ * 	color - guideline color
+ * 	label - guideline label
+ * 	start - function to get start of timeline
+ * 	length - function to get length of timeline
+ * 	offset - function to offset the start and length values
+ * 	modifier - function to return the progress based on {start}, {length} and {source}
+ * 	lerp - linear interpolation factor between the previous progress and the next
+ * 	ease - easing function
+ */
+var addTimeline = function addTimeline(timelines) {
+	return function (userOptions) {
+		var _listeners;
+
+		var options = _extends({
+			color: 'green',
+			label: 'Undefined',
+			start: defaultStart,
+			length: defaultLength,
+			offset: defaultOffset,
+			modifier: defaultModifier,
+			lerp: 1
+		}, userOptions, {
+			ease: userOptions.ease && _easings2.default[userOptions.ease] || userOptions.ease || _easings2.default.linear
+		});
+
+		var listeners = (_listeners = {}, _defineProperty(_listeners, _constants.STATUS.LOADING, []), _defineProperty(_listeners, _constants.STATUS.WAITING, []), _defineProperty(_listeners, _constants.STATUS.WALKING, []), _defineProperty(_listeners, _constants.STATUS.FINISHED, []), _defineProperty(_listeners, 'progress', []), _listeners);
+
+		var start = (0, _cache2.default)(function () {
+			return options.start() + options.offset();
+		});
+		var length = (0, _cache2.default)(function () {
+			return options.length() - options.offset() * 2;
+		});
+
+		var on = function on(event, listener) {
+			timeline.listeners[event].push(listener);
+
+			return timeline;
+		};
+
+		var off = function off(event, listener) {
+			var index = timeline.listeners[event].indexOf(listener);
+
+			if (index !== -1) {
+				timeline.listeners[event].splice(index, 1);
+			}
+
+			return timeline;
+		};
+
+		var timeline = {
+			options: options,
+			listeners: listeners,
+			start: start,
+			length: length,
+			on: on,
+			off: off
+		};
+
+		timeline.store = (0, _store2.default)((0, _reducer2.default)(timeline));
+		timelines.push(timeline);
+
+		return timeline;
+	};
 };
 
-exports.default = function (options) {
-    return function () {
-        var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+/**
+ * Remove a {timeline} from the collection
+ */
+var removeTimeline = function removeTimeline(timelines) {
+	return function (timeline) {
+		var index = timelines.indexOf(timeline);
 
-        var source = options.source();
-        var start = options.start();
-        var length = options.length();
-        var status = nextStatus({ source: source, start: start, length: length });
-        var progress = nextProgress(state.progress, options.modifier(options.source(), start, length), options.lerp);
+		if (index !== -1) {
+			timelines.splice(index, 1);
+		}
+	};
+};
 
-        return { status: status, progress: progress };
-    };
+/**
+ * Creates a timeline from an element
+ * The {start} and {length} will be calculated based
+ * on the elements position
+ */
+var fromElement = function fromElement(timelineCreator) {
+	return function (element, options) {
+		return timelineCreator(_extends({
+			start: function start() {
+				return (0, _utilities.getElementTop)(element);
+			},
+			length: function length() {
+				return element.offsetHeight;
+			}
+		}, options)).on(_constants.STATUS.LOADING, addStatusClassNameToElement(element, _constants.STATUS.LOADING)).on(_constants.STATUS.WAITING, addStatusClassNameToElement(element, _constants.STATUS.WAITING)).on(_constants.STATUS.WALKING, addStatusClassNameToElement(element, _constants.STATUS.WALKING)).on(_constants.STATUS.FINISHED, addStatusClassNameToElement(element, _constants.STATUS.FINISHED));
+	};
+};
+
+/**
+ * Creates a timeline from pixel values
+ * The {start} and {length} needs to be in pixels
+ */
+var fromPixels = function fromPixels(timelineCreator) {
+	return function (_start, _length, options) {
+		return timelineCreator(_extends({
+			start: function start() {
+				return _start;
+			},
+			length: function length() {
+				return _length;
+			}
+		}, options));
+	};
+};
+
+/**
+ * Creates a timeline from percentage values
+ * The {start} and {length} will be based on {timeline}'s
+ */
+var fromPercentage = function fromPercentage(timelineCreator) {
+	return function (timeline, _start2, _length2, options) {
+		return timelineCreator(_extends({
+			start: function start() {
+				return timeline.start() + timeline.length() * _start2;
+			},
+			length: function length() {
+				return timeline.length() * _length2;
+			}
+		}, options));
+	};
+};
+
+exports.default = function (timelines) {
+	var timelineCreator = addTimeline(timelines);
+
+	return {
+		addTimeline: timelineCreator,
+		fromPixels: fromPixels(timelineCreator),
+		fromElement: fromElement(timelineCreator),
+		fromPercentage: fromPercentage(timelineCreator),
+		removeTimeline: removeTimeline(timelines)
+	};
 };
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-// Generated by CoffeeScript 1.7.1
-(function() {
-  var getNanoSeconds, hrtime, loadTime;
-
-  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
-    module.exports = function() {
-      return performance.now();
-    };
-  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
-    module.exports = function() {
-      return (getNanoSeconds() - loadTime) / 1e6;
-    };
-    hrtime = process.hrtime;
-    getNanoSeconds = function() {
-      var hr;
-      hr = hrtime();
-      return hr[0] * 1e9 + hr[1];
-    };
-    loadTime = getNanoSeconds();
-  } else if (Date.now) {
-    module.exports = function() {
-      return Date.now() - loadTime;
-    };
-    loadTime = Date.now();
-  } else {
-    module.exports = function() {
-      return new Date().getTime() - loadTime;
-    };
-    loadTime = new Date().getTime();
-  }
-
-}).call(this);
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var now = __webpack_require__(6)
+var now = __webpack_require__(10)
   , root = typeof window === 'undefined' ? global : window
   , vendors = ['moz', 'webkit']
   , suffix = 'AnimationFrame'
@@ -774,6 +762,38 @@ module.exports.polyfill = function() {
 
 
 /***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var iteration = 0;
+
+exports.default = function (compute) {
+	var cached = void 0;
+	var next = void 0;
+
+	return function () {
+		if (next !== iteration) {
+			next = iteration;
+			cached = compute();
+		}
+
+		return cached;
+	};
+};
+
+if (typeof window !== 'undefined') {
+	window.addEventListener('resize', function () {
+		iteration++;
+	});
+}
+
+/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -781,15 +801,155 @@ module.exports.polyfill = function() {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
+});
+exports.nextStatus = exports.nextProgress = undefined;
+
+var _constants = __webpack_require__(1);
+
+var _utilities = __webpack_require__(0);
+
+var nextProgress = exports.nextProgress = function nextProgress(_ref, state, source) {
+	var options = _ref.options,
+	    start = _ref.start,
+	    length = _ref.length;
+
+	var progress = options.ease(options.modifier(source, start(), length()));
+
+	if (options.lerp && state.progress.toFixed(3) !== progress.toFixed(3)) {
+		progress = (0, _utilities.lerp)(state.progress, progress, options.lerp);
+	}
+
+	return progress;
+};
+
+var nextStatus = exports.nextStatus = function nextStatus(_ref2, source) {
+	var start = _ref2.start,
+	    length = _ref2.length;
+
+	if ((0, _utilities.isLesserThan)(source, start())) {
+		return _constants.STATUS.WAITING;
+	} else if ((0, _utilities.isInBetween)(source, start(), start() + length())) {
+		return _constants.STATUS.WALKING;
+	} else if ((0, _utilities.isGreaterThan)(source, start() + length())) {
+		return _constants.STATUS.FINISHED;
+	}
+
+	return _constants.STATUS.LOADING;
+};
+
+var initialState = {
+	status: _constants.STATUS.LOADING,
+	progress: -1
+};
+
+exports.default = function (timeline) {
+	return function () {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+		var source = arguments[1];
+
+		if (source) {
+			return {
+				status: nextStatus(timeline, source),
+				progress: nextProgress(timeline, state, source)
+			};
+		}
+
+		return state;
+	};
+};
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+exports.default = function (reducer) {
+	var state = reducer();
+
+	return {
+		getState: function getState() {
+			return state;
+		},
+		reduce: function reduce(source) {
+			state = reducer(state, source);
+
+			return state;
+		}
+	};
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+// Generated by CoffeeScript 1.7.1
+(function() {
+  var getNanoSeconds, hrtime, loadTime;
+
+  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
+    module.exports = function() {
+      return performance.now();
+    };
+  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
+    module.exports = function() {
+      return (getNanoSeconds() - loadTime) / 1e6;
+    };
+    hrtime = process.hrtime;
+    getNanoSeconds = function() {
+      var hr;
+      hr = hrtime();
+      return hr[0] * 1e9 + hr[1];
+    };
+    loadTime = getNanoSeconds();
+  } else if (Date.now) {
+    module.exports = function() {
+      return Date.now() - loadTime;
+    };
+    loadTime = Date.now();
+  } else {
+    module.exports = function() {
+      return new Date().getTime() - loadTime;
+    };
+    loadTime = new Date().getTime();
+  }
+
+}).call(this);
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
 });
 exports.fromPixels = exports.fromPercentage = exports.fromElement = exports.addTimeline = exports.easings = exports.utilities = exports.constants = undefined;
 
-var _timeline2 = __webpack_require__(4);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _raf = __webpack_require__(6);
+
+var _raf2 = _interopRequireDefault(_raf);
+
+var _timeline2 = __webpack_require__(5);
 
 var _timeline3 = _interopRequireDefault(_timeline2);
 
-var _core = __webpack_require__(2);
+var _guide = __webpack_require__(4);
+
+var _guide2 = _interopRequireDefault(_guide);
+
+var _core = __webpack_require__(3);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -801,7 +961,7 @@ var _utilities2 = __webpack_require__(0);
 
 var _utilities = _interopRequireWildcard(_utilities2);
 
-var _easings2 = __webpack_require__(3);
+var _easings2 = __webpack_require__(2);
 
 var _easings = _interopRequireWildcard(_easings2);
 
@@ -826,7 +986,25 @@ exports.addTimeline = addTimeline;
 exports.fromElement = fromElement;
 exports.fromPercentage = fromPercentage;
 exports.fromPixels = fromPixels;
-exports.default = (0, _core2.default)(timelines);
+
+
+var defaultOptions = {
+	source: function source() {
+		return (window.pageYOffset || document.documentElement.scrollTop) + window.innerHeight / 2;
+	},
+	iterate: _raf2.default,
+	debug: false
+};
+
+exports.default = function (userOptons) {
+	var options = _extends({}, defaultOptions, userOptons);
+
+	if (options.debug) {
+		(0, _guide2.default)(timelines, options);
+	}
+
+	return (0, _core2.default)(timelines, options);
+};
 
 /***/ })
 /******/ ]);

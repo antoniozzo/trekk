@@ -1,10 +1,23 @@
 /**
- * Log next arguments if {loud} is true
+ * Test if {y} is lesser than {v}
  */
-export const isLesserThan = (y, v) => y < v
-export const isGreaterThan = (y, v) => y > v
-export const isInBetween = (y, v0, v1) => y >= v0 && y <= v1
+export function isLesserThan(y, v) {
+	return y < v
+}
 
+/**
+ * Test if {y} is greater than {v}
+ */
+export function isGreaterThan(y, v) {
+	return y > v
+}
+
+/**
+ * Test if {y} is greater than {v0} and lesser than {v1}
+ */
+export function isInBetween(y, v0, v1) {
+	return y >= v0 && y <= v1
+}
 
 /**
  * Linear interpolation method.
@@ -52,79 +65,4 @@ export function getElementTop(element) {
 	} while (currentElement)
 
 	return top
-}
-
-/**
- * Create a guideline
- */
-export function addGuide(pos) {
-	const guide = document.createElement('div')
-	const label = document.createElement('span')
-	const line = document.createElement('div')
-
-	guide.style.zIndex = 999
-	guide.style.width = '100%'
-	guide.style.position = 'absolute'
-	guide.style.top = `${pos}px`
-	guide.style.left = 0
-
-	label.style.borderWidth = 0
-	label.style.borderStyle = 'dashed'
-	label.style.position = 'absolute'
-	label.style.margin = '2px 5px'
-
-	document.body.appendChild(guide)
-
-	return {
-		color(value) {
-			// guide.style.borderTopColor = value
-			line.style.borderLeftColor = value
-			label.style.color = value
-			label.style.borderColor = value
-
-			return this
-		},
-		fixed() {
-			guide.style.position = 'fixed'
-
-			return this
-		},
-		label(text, top) {
-			label.innerHTML = text
-
-			guide.appendChild(label)
-
-			if (top) {
-				label.style.bottom = 0
-				label.style.borderBottomWidth = '1px'
-			} else {
-				label.style.top = 0
-				label.style.borderTopWidth = '1px'
-			}
-
-			return this
-		},
-		col(i) {
-			guide.style.left = `${20 * i}px`
-
-			return this
-		},
-		width(w) {
-			label.style.width = w
-
-			return this
-		},
-		line(h) {
-			line.style.borderLeft = '1px dashed green'
-			line.style.position = 'absolute'
-			line.style.top = 0
-			line.style.left = 0
-			line.style.width = '1px'
-			line.style.height = `${h}px`
-
-			guide.appendChild(line)
-
-			return this
-		}
-	}
 }
