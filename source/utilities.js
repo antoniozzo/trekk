@@ -1,4 +1,46 @@
 /**
+ * Test if {v} is a string
+ */
+// export function isString(v) {
+// 	return typeof v === 'string'
+// }
+
+/**
+ * Test if {v} is a function
+ */
+export function isFunction(v) {
+	return typeof v === 'function'
+}
+
+/**
+ * Test if {v} is a number
+ */
+// export function isNumber(v) {
+// 	return typeof v === 'number'
+// }
+
+/**
+ * Test if {v} is an object
+ */
+export function isObject(v) {
+	return typeof v === 'object'
+}
+
+/**
+ * Test if {v} is a string with a percentage
+ */
+// export function isPercentage(v) {
+// 	return isString(v) && v.indexOf('%') !== -1
+// }
+
+/**
+ * String percentage {v} to decimal format
+ */
+export function parsePercentage(v) {
+	return parseInt(v, 10) / 100
+}
+
+/**
  * Test if {y} is lesser than {v}
  */
 export function isLesserThan(y, v) {

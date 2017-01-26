@@ -17,6 +17,9 @@
   "author": "Antonio Rizzo",
   "license": "ISC",
   "dependencies": {
+    "args-js": "^0.10.12",
+    "invariant": "^2.2.2",
+    "numeral": "^2.0.4",
     "raf": "^3.3.0"
   },
   "devDependencies": {
@@ -24,6 +27,7 @@
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-polyfill": "^6.20.0",
     "babel-preset-es2015": "^6.18.0",
@@ -42,6 +46,9 @@
     "presets": [
       "es2015",
       "stage-0"
+    ],
+    "plugins": [
+      "add-module-exports"
     ]
   },
   "ava": {
@@ -51,11 +58,16 @@
     ]
   },
   "nyc": {
-    "exclude": "test/*"
+    "exclude": [
+      "test/*",
+      "source/easings.js"
+    ]
   },
-  "eslintConfig" : {
+  "eslintConfig": {
     "parser": "babel-eslint",
-    "extends": ["airbnb-base"],
+    "extends": [
+      "airbnb-base"
+    ],
     "env": {
       "browser": true,
       "node": true,
@@ -67,23 +79,23 @@
     },
     "rules": {
       "arrow-parens": 0,
-      "arrow-body-style": [2, "as-needed"],
-
+      "arrow-body-style": [
+        2,
+        "as-needed"
+      ],
       "comma-dangle": 0,
-
       "import/imports-first": 0,
       "import/newline-after-import": 0,
       "import/no-extraneous-dependencies": 0,
       "import/no-named-as-default": 0,
       "import/no-unresolved": 2,
       "import/prefer-default-export": 0,
-
-      "indent": ["error", "tab"],
-
+      "indent": [
+        "error",
+        "tab"
+      ],
       "max-len": 0,
-
       "newline-per-chained-call": 0,
-
       "no-console": 1,
       "no-tabs": 0,
       "no-plusplus": 0,
@@ -91,19 +103,20 @@
       "no-use-before-define": 0,
       "no-return-assign": 0,
       "no-param-reassign": 0,
-
       "prefer-template": 2,
-
       "class-methods-use-this": 0,
-
-      "semi": [2, "never"],
-
-      "key-spacing": [2, {
-        "align": "colon",
-        "beforeColon": true,
-        "afterColon": true
-      }],
-
+      "semi": [
+        2,
+        "never"
+      ],
+      "key-spacing": [
+        2,
+        {
+          "align": "colon",
+          "beforeColon": true,
+          "afterColon": true
+        }
+      ],
       "require-yield": 0
     },
     "settings": {

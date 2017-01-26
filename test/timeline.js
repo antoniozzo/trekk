@@ -36,101 +36,101 @@ test('it removes timeline from collection only if found', t => {
 	t.is(timelines.length, 1)
 })
 
-test('it creates a timeline from element', t => {
-	const timelines = []
-	const { fromElement } = timelineService(timelines)
+// test('it creates a timeline from element', t => {
+// 	const timelines = []
+// 	const { fromElement } = timelineService(timelines)
 
-	const fakeElement = {
-		offsetTop    : 50,
-		offsetHeight : 500
-	}
+// 	const fakeElement = {
+// 		offsetTop    : 50,
+// 		offsetHeight : 500
+// 	}
 
-	const timeline = fromElement(fakeElement, fakeOptions)
+// 	const timeline = fromElement(fakeElement, fakeOptions)
 
-	t.is(timelines.length, 1)
-	t.is(timeline.options.start(), 50)
-	t.is(timeline.options.length(), 500)
-})
+// 	t.is(timelines.length, 1)
+// 	t.is(timeline.options.start(), 50)
+// 	t.is(timeline.options.length(), 500)
+// })
 
-test('it creates a timeline from pixels', t => {
-	const timelines = []
-	const { fromPixels } = timelineService(timelines)
+// test('it creates a timeline from pixels', t => {
+// 	const timelines = []
+// 	const { fromPixels } = timelineService(timelines)
 
-	const timeline = fromPixels(300, 600, fakeOptions)
+// 	const timeline = fromPixels(300, 600, fakeOptions)
 
-	t.is(timelines.length, 1)
-	t.is(timeline.options.start(), 300)
-	t.is(timeline.options.length(), 600)
-})
+// 	t.is(timelines.length, 1)
+// 	t.is(timeline.options.start(), 300)
+// 	t.is(timeline.options.length(), 600)
+// })
 
-test('it creates a timeline from percentage', t => {
-	const timelines = []
-	const { fromPixels, fromPercentage } = timelineService(timelines)
+// test('it creates a timeline from percentage', t => {
+// 	const timelines = []
+// 	const { fromPixels, fromPercentage } = timelineService(timelines)
 
-	const timelineFromPixels = fromPixels(200, 400, fakeOptions)
-	const timelineFromPercentage = fromPercentage(timelineFromPixels, 0.2, 0.5, fakeOptions)
+// 	const timelineFromPixels = fromPixels(200, 400, fakeOptions)
+// 	const timelineFromPercentage = fromPercentage(timelineFromPixels, 0.2, 0.5, fakeOptions)
 
-	t.is(timelines.length, 2)
-	t.is(timelineFromPercentage.options.start(), 280)
-	t.is(timelineFromPercentage.options.length(), 200)
-})
+// 	t.is(timelines.length, 2)
+// 	t.is(timelineFromPercentage.options.start(), 280)
+// 	t.is(timelineFromPercentage.options.length(), 200)
+// })
 
-test('it adds event listener to timeline', t => {
-	const { addTimeline } = timelineService([])
+// test('it adds event listener to timeline', t => {
+// 	const { addTimeline } = timelineService([])
 
-	const fn = () => {}
-	const timeline = addTimeline(fakeOptions).on('progress', fn)
+// 	const fn = () => {}
+// 	const timeline = addTimeline(fakeOptions).on('progress', fn)
 
-	t.is(timeline.listeners.progress.length, 1)
-	t.is(timeline.listeners.progress[0], fn)
-	t.is(timeline.listeners.progress[0], fn)
-})
+// 	t.is(timeline.listeners.progress.length, 1)
+// 	t.is(timeline.listeners.progress[0], fn)
+// 	t.is(timeline.listeners.progress[0], fn)
+// })
 
-test('it removes event listener from timeline', t => {
-	const { addTimeline } = timelineService([])
+// test('it removes event listener from timeline', t => {
+// 	const { addTimeline } = timelineService([])
 
-	const fn = () => {}
-	const timeline = addTimeline(fakeOptions).on('progress', fn)
+// 	const fn = () => {}
+// 	const timeline = addTimeline(fakeOptions).on('progress', fn)
 
-	t.is(timeline.listeners.progress.length, 1)
-	t.is(timeline.listeners.progress[0], fn)
+// 	t.is(timeline.listeners.progress.length, 1)
+// 	t.is(timeline.listeners.progress[0], fn)
 
-	timeline.off('progress', fn)
-	t.is(timeline.listeners.progress.length, 0)
-})
+// 	timeline.off('progress', fn)
+// 	t.is(timeline.listeners.progress.length, 0)
+// })
 
-test('it only removes event listener from timeline if it can find it', t => {
-	const { addTimeline } = timelineService([])
+// test('it only removes event listener from timeline if it can find it', t => {
+// 	const { addTimeline } = timelineService([])
 
-	const fn1 = () => {}
-	const fn2 = () => {}
-	const timeline = addTimeline(fakeOptions).on('progress', fn1)
+// 	const fn1 = () => {}
+// 	const fn2 = () => {}
+// 	const timeline = addTimeline(fakeOptions).on('progress', fn1)
 
-	t.is(timeline.listeners.progress.length, 1)
-	t.is(timeline.listeners.progress[0], fn1)
+// 	t.is(timeline.listeners.progress.length, 1)
+// 	t.is(timeline.listeners.progress[0], fn1)
 
-	timeline.off('progress', fn2)
-	t.is(timeline.listeners.progress.length, 1)
-})
+// 	timeline.off('progress', fn2)
+// 	t.is(timeline.listeners.progress.length, 1)
+// })
 
-test('it sets classes of timeline created from element', t => {
-	const timelines = []
-	const { fromElement } = timelineService(timelines)
+// test('it sets classes of timeline created from element', t => {
+// 	const timelines = []
+// 	const { fromElement } = timelineService(timelines)
 
-	const fakeElement = {
-		offsetTop    : 50,
-		offsetHeight : 500,
-		classList    : {
-			remove : className => {
-				t.is(className, 'loading')
-			},
-			add : className => {
-				t.is(className, 'waiting')
-			}
-		}
-	}
+// 	const fakeElement = {
+// 		offsetTop    : 50,
+// 		offsetHeight : 500,
+// 		classList    : {
+// 			remove : className => {
+// 				t.is(className, 'loading')
+// 			},
+// 			add : className => {
+// 				t.is(className, 'waiting')
+// 			}
+// 		}
+// 	}
 
-	const timeline = fromElement(fakeElement, fakeOptions)
+// 	const timeline = fromElement(fakeElement, fakeOptions)
 
-	timeline.listeners.waiting[0]()
-})
+// 	timeline.listeners.waiting[0]()
+// })

@@ -5,7 +5,8 @@ import core, { update } from '../source/core'
 
 test('it updates state', t => {
 	const nextState = update({
-		store : makeStore(state => (state && state * 2) || 2)
+		store   : makeStore(state => (state && state * 2) || 2),
+		options : {}
 	}, 0)
 
 	t.is(nextState, 4)
@@ -16,8 +17,8 @@ test.cb('it notifies listeners on status change', t => {
 		store : makeStore(state => ({
 			status : state ? 'bar' : 'foo'
 		})),
-		listeners : {
-			bar : [() => t.end()]
+		options : {
+			bar : () => t.end()
 		}
 	}, 0)
 })
@@ -27,11 +28,11 @@ test.cb('it notifies listeners on progress change', t => {
 		store : makeStore(state => ({
 			progress : state ? 1 : 0
 		})),
-		listeners : {
-			progress : [p => {
+		options : {
+			progress : p => {
 				t.is(p, 1)
 				t.end()
-			}]
+			}
 		}
 	}, 0)
 })

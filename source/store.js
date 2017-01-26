@@ -3,8 +3,8 @@ export default reducer => {
 
 	return {
 		getState : () => state,
-		reduce   : source => {
-			state = reducer(state, source)
+		reduce   : () => {
+			state = reducer(state)
 
 			return state
 		}

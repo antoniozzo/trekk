@@ -1,18 +1,17 @@
-export const broadcast = ({ listeners, prevState, nextState }) => {
-	if (prevState.progress !== nextState.progress) {
-		listeners.progress.forEach(listener => listener(nextState.progress))
-	}
+import { isFunction } from './utilities'
 
-	if (prevState.status !== nextState.status) {
-		listeners[nextState.status].forEach(listener => listener())
-	}
-}
-
-export const update = ({ listeners, store, options }, source) => {
+export const update = (timeline, source) => {
+	const { store, options } = timeline
 	const prevState = store.getState()
 	const nextState = store.reduce(source)
 
-	broadcast({ listeners, prevState, nextState })
+	if (options.progress && prevState.progress !== nextState.progress) {
+		options.progress(nextState.progress, timeline)
+	}
+
+	if (prevState.status !== nextState.status && isFunction(options[nextState.status])) {
+		options[nextState.status](timeline)
+	}
 
 	return nextState
 }

@@ -1,11 +1,3 @@
-import { STATUS, STATUS_ARRAY } from './constants'
-
-import {
-	getElementTop,
-	removeClassesFromElement,
-	addClassesToElement
-} from './utilities'
-
 import makeReducer from './reducer'
 import makeStore from './store'
 import makeCache from './cache'
@@ -15,24 +7,14 @@ import easings from './easings'
  * Default option functions
  */
 export const defaultStart = () => 0
-export const defaultLength = () => 0
-export const defaultOffset = () => 0
+export const defaultEnd = () => 0
 export const defaultModifier = (p, v0, v1) => {
-	const progress = (p - v0) / v1
+	const progress = (p - v0) / (v1 - v0)
 
 	if (progress >= 1) return 1
 	if (progress <= 0) return 0
 
 	return progress
-}
-
-/**
- * Removes all status classNames from element
- * and adds {status} as className
- */
-export const addStatusClassNameToElement = (element, status) => () => {
-	removeClassesFromElement(element, ...STATUS_ARRAY)
-	addClassesToElement(element, status)
 }
 
 /**
@@ -53,48 +35,20 @@ const addTimeline = timelines =>
 			color    : 'green',
 			label    : 'Undefined',
 			start    : defaultStart,
-			length   : defaultLength,
-			offset   : defaultOffset,
+			end      : defaultEnd,
 			modifier : defaultModifier,
 			lerp     : 1,
 			...userOptions,
 			ease     : (userOptions.ease && easings[userOptions.ease]) || userOptions.ease || easings.linear
 		}
 
-		const listeners = {
-			[STATUS.LOADING]  : [],
-			[STATUS.WAITING]  : [],
-			[STATUS.WALKING]  : [],
-			[STATUS.FINISHED] : [],
-			progress          : []
-		}
-
-		const start = makeCache(() => options.start() + options.offset())
-		const length = makeCache(() => options.length() - (options.offset() * 2))
-
-		const on = (event, listener) => {
-			timeline.listeners[event].push(listener)
-
-			return timeline
-		}
-
-		const off = (event, listener) => {
-			const index = timeline.listeners[event].indexOf(listener)
-
-			if (index !== -1) {
-				timeline.listeners[event].splice(index, 1)
-			}
-
-			return timeline
-		}
+		const start = makeCache(options.start)
+		const end = makeCache(options.end)
 
 		const timeline = {
 			options,
-			listeners,
 			start,
-			length,
-			on,
-			off
+			end
 		}
 
 		timeline.store = makeStore(makeReducer(timeline))
@@ -115,55 +69,7 @@ const removeTimeline = timelines =>
 		}
 	}
 
-/**
- * Creates a timeline from an element
- * The {start} and {length} will be calculated based
- * on the elements position
- */
-const fromElement = timelineCreator =>
-	(element, options) =>
-		timelineCreator({
-			start  : () => getElementTop(element),
-			length : () => element.offsetHeight,
-			...options
-		})
-		.on(STATUS.LOADING, addStatusClassNameToElement(element, STATUS.LOADING))
-		.on(STATUS.WAITING, addStatusClassNameToElement(element, STATUS.WAITING))
-		.on(STATUS.WALKING, addStatusClassNameToElement(element, STATUS.WALKING))
-		.on(STATUS.FINISHED, addStatusClassNameToElement(element, STATUS.FINISHED))
-
-/**
- * Creates a timeline from pixel values
- * The {start} and {length} needs to be in pixels
- */
-const fromPixels = timelineCreator =>
-	(start, length, options) =>
-		timelineCreator({
-			start  : () => start,
-			length : () => length,
-			...options
-		})
-
-/**
- * Creates a timeline from percentage values
- * The {start} and {length} will be based on {timeline}'s
- */
-const fromPercentage = timelineCreator =>
-	(timeline, start, length, options) =>
-		timelineCreator({
-			start  : () => timeline.start() + (timeline.length() * start),
-			length : () => timeline.length() * length,
-			...options
-		})
-
-export default timelines => {
-	const timelineCreator = addTimeline(timelines)
-
-	return {
-		addTimeline    : timelineCreator,
-		fromPixels     : fromPixels(timelineCreator),
-		fromElement    : fromElement(timelineCreator),
-		fromPercentage : fromPercentage(timelineCreator),
-		removeTimeline : removeTimeline(timelines)
-	}
-}
+export default timelines => ({
+	addTimeline    : addTimeline(timelines),
+	removeTimeline : removeTimeline(timelines)
+})

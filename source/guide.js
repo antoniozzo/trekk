@@ -83,17 +83,14 @@ export default (timelines, options) => {
 		guides = []
 
 		timelines.forEach(t => {
-			const start = t.options.start() + t.options.offset()
-			const end = (t.options.start() + t.options.length()) - t.options.offset()
-
 			guides.push(
-				makeGuide(start)
+				makeGuide(t.start())
 					.color(t.options.color)
 					.label(t.options.label)
 			)
 
 			guides.push(
-				makeGuide(end)
+				makeGuide(t.end())
 					.color(t.options.color)
 					.label(t.options.label, true)
 			)

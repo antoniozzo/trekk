@@ -296,6 +296,7 @@ var easings = {
 };
 
 exports.default = easings;
+module.exports = exports["default"];
 
 /***/ }),
 /* 3 */
@@ -792,6 +793,7 @@ if (typeof window !== 'undefined') {
 		iteration++;
 	});
 }
+module.exports = exports['default'];
 
 /***/ }),
 /* 8 */
@@ -884,6 +886,8 @@ exports.default = function (reducer) {
 		}
 	};
 };
+
+module.exports = exports["default"];
 
 /***/ }),
 /* 10 */
