@@ -6,6 +6,7 @@ import easings from './easings'
 /**
  * Default option functions
  */
+export const defaultSource = () => window.pageYOffset
 export const defaultStart = () => 0
 export const defaultEnd = () => 0
 export const defaultModifier = (p, v0, v1) => {
