@@ -32,8 +32,8 @@ test('it reduces next progress with linear interpolation', t => {
 	const progress = nextProgress({
 		start   : 10,
 		end     : 30,
-		state   : { progress : 1 },
 		source  : 20,
+		state   : { progress : 0 },
 		options : {
 			lerp     : 0.5,
 			ease     : linear,
@@ -41,7 +41,7 @@ test('it reduces next progress with linear interpolation', t => {
 		}
 	})
 
-	t.is(progress, 0.75)
+	t.is(progress, 0.25)
 })
 
 test('it reduces next status to waiting', t => {

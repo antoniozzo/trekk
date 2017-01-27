@@ -30,11 +30,12 @@ export const defaultModifier = (p, v0, v1) => {
  * 	lerp - linear interpolation factor between the previous progress and the next
  * 	ease - easing function
  */
-const addTimeline = timelines =>
+const makeAddTimeline = timelines =>
 	userOptions => {
 		const options = {
 			color    : 'green',
 			label    : 'Undefined',
+			source   : defaultSource,
 			start    : defaultStart,
 			end      : defaultEnd,
 			modifier : defaultModifier,
@@ -61,7 +62,7 @@ const addTimeline = timelines =>
 /**
  * Remove a {timeline} from the collection
  */
-const removeTimeline = timelines =>
+const makeRemoveTimeline = timelines =>
 	timeline => {
 		const index = timelines.indexOf(timeline)
 
@@ -71,6 +72,6 @@ const removeTimeline = timelines =>
 	}
 
 export default timelines => ({
-	addTimeline    : addTimeline(timelines),
-	removeTimeline : removeTimeline(timelines)
+	addTimeline    : makeAddTimeline(timelines),
+	removeTimeline : makeRemoveTimeline(timelines)
 })

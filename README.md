@@ -40,7 +40,9 @@ trekk() // Start
 
 Start trekk. You need to run this only once in your scripts.
 
-| Param | Type | Default | Description
+#### Options
+
+| Option | Type | Default | Description
 | --- | --- | --- | ---
 | debug | `boolean` | `false` | Enter debug mode.
 | iterate | `function(next)` | `requestAnimationFrame` | Update function.
@@ -48,6 +50,8 @@ Start trekk. You need to run this only once in your scripts.
 ### trail(...)
 
 Use `trail` to create timelines in your document. All parameters are optional.
+
+#### Parameters
 
 | Param | Type | Default | Description
 | --- | --- | --- | ---
@@ -57,7 +61,19 @@ Use `trail` to create timelines in your document. All parameters are optional.
 | startPercentage | `string` | `undefined` | Start position of the trail in percentage. If this is a nested trail it will be a percentage of the parent trail length.
 | endPercentage | `string` | `undefined` | End position of the trail in percentage. If this is a nested trail it will be a percentage of the parent trail length.
 | progress | `function(progress)` | `undefined` | Called on update with the current progress.
-| options | `object` | `{}` | *See [Options](#options)*
+| options | `object` | `{}` | Object with options. *See below*
+
+#### Options
+
+| Param | Type | Default | Description
+| --- | --- | --- | ---
+| label | `string` | `undefined` | Used as a label when debugging.
+| offset | `function(progress)` | `undefined` | Called on update with the current progress.
+| lerp | `number`| `1` | Smooth the progress over time with some linear interpolation. Takes a value from 0 to 1.
+| ease | `string` | `"linear"` | Easing function to run before progress is broadcasted. See [Easings](#easings) for supported strings.
+| waiting | `function` | `undefined` | Called once when the y scroll position is above the trail start position.
+| walking | `function` | `undefined` | Called once when the y scroll position is within the trail start and end position.
+| finished | `function` | `undefined` | Called once when the y scroll position is below the trail end position.
 
 #### Examples
 
