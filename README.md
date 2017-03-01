@@ -1,4 +1,4 @@
-# :triangular_flag_on_post: trekk [![npm version](https://badge.fury.io/js/trekk.svg)](https://badge.fury.io/js/trekk) [![Coverage Status](https://coveralls.io/repos/github/antoniozzo/trekk/badge.svg?branch=develop)](https://coveralls.io/github/antoniozzo/trekk?branch=develop)
+# :triangular_flag_on_post: trekk [![npm version](https://badge.fury.io/js/trekk.svg)](https://badge.fury.io/js/trekk) [![Coverage Status](https://coveralls.io/repos/github/antoniozzo/trekk/badge.svg?branch=develop)](https://coveralls.io/github/antoniozzo/trekk?branch=master)
 
 ## About
 
