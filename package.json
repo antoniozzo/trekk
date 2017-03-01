@@ -1,6 +1,6 @@
 {
   "name": "trekk",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Trekk is a helper library to create timeline and triggered animations based on scroll positions of elements / document.",
   "main": "build/trekk.js",
   "module": "index.js",
