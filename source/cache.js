@@ -1,3 +1,4 @@
+const interval = 1000
 let iteration = 0
 
 export default compute => {
@@ -14,8 +15,10 @@ export default compute => {
 	}
 }
 
-if (typeof window !== 'undefined') {
-	window.addEventListener('resize', () => {
-		iteration++
-	})
+export const clear = () => {
+	iteration++
 }
+
+setInterval(() => {
+	iteration++
+}, interval)

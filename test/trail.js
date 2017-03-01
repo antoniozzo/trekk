@@ -1,12 +1,17 @@
 import test from 'ava'
 
 import makeTimelineCreators from '../source/timeline'
-import makeTrailCreator, { getTimelineOptions } from '../source/trail'
+import makeTrailCreator, { getTimelineOptions, defaultScope } from '../source/trail'
 
 const scope = {
 	start : () => 100,
 	end   : () => 200
 }
+
+test('it has a default scope', t => {
+	t.is(defaultScope.start(), 0)
+	t.is(defaultScope.end(), 0)
+})
 
 test('it makes a trail creator', t => {
 	const trail = makeTrailCreator(makeTimelineCreators([]))
@@ -64,7 +69,7 @@ test('it toggles classes for trail created from element', t => {
 		offsetTop    : 200,
 		offsetHeight : 400,
 		classList    : {
-			remove : className => t.is(className, 'loading')
+			remove : (...className) => t.is(typeof className, 'object')
 		}
 	}
 
@@ -86,7 +91,7 @@ test.cb('it bubbles callbacks of trail created from element', t => {
 		offsetTop    : 200,
 		offsetHeight : 400,
 		classList    : {
-			remove : className => t.is(className, 'loading'),
+			remove : (...className) => t.is(typeof className, 'object'),
 			add    : className => t.is(className, 'waiting')
 		}
 	}

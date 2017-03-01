@@ -14,6 +14,14 @@ export const nextProgress = ({ options, start, end, state, source }) => {
 		progress = lerp(state.progress, progress, options.lerp)
 	}
 
+	if (progress >= 1) {
+		progress = 1
+	}
+
+	if (progress <= 0) {
+		progress = 0
+	}
+
 	return progress
 }
 
@@ -34,10 +42,9 @@ const initialState = {
 	progress : -1
 }
 
-export default timeline => state => {
+export default timeline => (state, source) => {
 	if (state) {
 		const { options } = timeline
-		const source = options.source()
 		const start = timeline.start()
 		const end = timeline.end()
 

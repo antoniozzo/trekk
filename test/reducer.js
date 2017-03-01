@@ -88,14 +88,45 @@ test('it reduces next state', t => {
 	const { addTimeline } = timelineCreator([])
 
 	const reducer = makeReducer(addTimeline({
-		source : () => 40,
-		start  : () => 20,
-		end    : () => 60
+		start : () => 20,
+		end   : () => 60
 	}))
 
 	const state = reducer({
 		progress : 0
-	})
+	}, 40)
 
 	t.is(state.progress, 0.5)
+})
+
+test('it sets negative progress to zero', t => {
+	const progress = nextProgress({
+		start   : 20,
+		end     : 30,
+		source  : 10,
+		state   : { progress : -1 },
+		options : {
+			lerp     : 0.8,
+			ease     : linear,
+			modifier : defaultModifier
+		}
+	})
+
+	t.is(progress, 0)
+})
+
+test('it sets progress more than 1 to 1', t => {
+	const progress = nextProgress({
+		start   : 20,
+		end     : 30,
+		source  : 40,
+		state   : { progress : -1 },
+		options : {
+			lerp     : 1,
+			ease     : linear,
+			modifier : defaultModifier
+		}
+	})
+
+	t.is(progress, 1)
 })

@@ -17,13 +17,31 @@ export const update = (timeline, source) => {
 }
 
 export default (timelines, options) => {
-	const next = () => {
-		const source = options.source()
+	let enabled = true
 
-		timelines.forEach(t => update(t, source))
+	const next = () => {
+		if (enabled) {
+			const source = options.source() + options.offset()
+			const start = +new Date()
+
+			for (let i = 0; i < timelines.length; i += 1) {
+				update(timelines[i], source)
+
+				const end = +new Date()
+
+				if (end - start > options.fps) {
+					break
+				}
+			}
+		}
 
 		options.iterate(next)
 	}
 
 	options.iterate(next)
+
+	return {
+		enable  : () => { enabled = true },
+		disable : () => { enabled = false }
+	}
 }

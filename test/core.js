@@ -1,7 +1,7 @@
 import test from 'ava'
 
 import makeStore from '../source/store'
-import core, { update } from '../source/core'
+import makeCore, { update } from '../source/core'
 
 test('it updates state', t => {
 	const nextState = update({
@@ -40,8 +40,9 @@ test.cb('it notifies listeners on progress change', t => {
 test('it iterates', t => {
 	let iterations = 0
 
-	core([], {
+	makeCore([], {
 		source  : () => 0,
+		offset  : () => 0,
 		iterate : next => {
 			iterations += 1
 
@@ -52,4 +53,56 @@ test('it iterates', t => {
 	})
 
 	t.is(iterations, 3)
+})
+
+test('it skips timelines above 60fps', t => {
+	let iterations = 0
+
+	makeCore([
+		{
+			store   : makeStore(() => 1),
+			options : {}
+		},
+		{
+			store   : makeStore(state => (state && t.fail()) || 1),
+			options : {}
+		}
+	], {
+		source  : () => 0,
+		offset  : () => 0,
+		fps     : -1,
+		iterate : next => {
+			iterations += 1
+
+			if (iterations < 2) {
+				next()
+			}
+		}
+	})
+})
+
+test.cb('it disables/enables the core', t => {
+	let iterations = 0
+
+	const core = makeCore([{
+		store   : makeStore(state => (state && t.fail()) || 1),
+		options : {}
+	}], {
+		source  : () => 0,
+		offset  : () => 0,
+		fps     : -1,
+		iterate : next => {
+			iterations += 1
+
+			if (iterations < 2) {
+				setTimeout(() => {
+					next()
+					t.end()
+				}, 100)
+			}
+		}
+	})
+
+	core.enable()
+	core.disable()
 })

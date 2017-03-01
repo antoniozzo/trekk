@@ -15,9 +15,8 @@ import {
 } from './utilities'
 
 export const defaultScope = {
-	start  : () => document.body.offsetTop,
-	end    : () => document.body.offsetHeight,
-	source : () => (window.pageYOffset || document.documentElement.scrollTop) + (window.innerHeight / 2)
+	start : () => 0,
+	end   : () => 0
 }
 
 /**
@@ -25,12 +24,11 @@ export const defaultScope = {
  * and adds {status} as className
  */
 export const addStatusClassNameToElement = (element, status) => {
-	removeClassesFromElement(element, ...STATUS_ARRAY)
+	STATUS_ARRAY.map(s => removeClassesFromElement(element, s))
 	addClassesToElement(element, status)
 }
 
 export const getTimelineOptions = (scope, ...args) => {
-	const { source } = scope
 	let start
 	let end
 
@@ -89,7 +87,6 @@ export const getTimelineOptions = (scope, ...args) => {
 	const offset = (isFunction(options.offset) && options.offset) || (options.offset && (() => options.offset))
 
 	return {
-		source,
 		progress,
 		start : (offset && (() => start() + offset())) || start,
 		end   : (offset && (() => end() - offset())) || end,
@@ -113,7 +110,10 @@ export default ({ addTimeline }) => {
 
 		addTimeline(options)
 
-		return makeTrailCreator(options)
+		const nextTrail = makeTrailCreator(options)
+		nextTrail.options = options
+
+		return nextTrail
 	}
 
 	return makeTrailCreator(defaultScope)

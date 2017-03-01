@@ -97,7 +97,7 @@ export default (timelines, options) => {
 		})
 
 		guides.push(
-			makeGuide(options.source())
+			makeGuide(options.offset())
 				.color('red')
 				.width('100%')
 				.label('')

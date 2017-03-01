@@ -6,17 +6,9 @@ import easings from './easings'
 /**
  * Default option functions
  */
-export const defaultSource = () => window.pageYOffset
 export const defaultStart = () => 0
 export const defaultEnd = () => 0
-export const defaultModifier = (p, v0, v1) => {
-	const progress = (p - v0) / (v1 - v0)
-
-	if (progress >= 1) return 1
-	if (progress <= 0) return 0
-
-	return progress
-}
+export const defaultModifier = (p, v0, v1) => (p - v0) / (v1 - v0)
 
 /**
  * Add a timeline to the collection.
@@ -35,7 +27,6 @@ const makeAddTimeline = timelines =>
 		const options = {
 			color    : 'green',
 			label    : 'Undefined',
-			source   : defaultSource,
 			start    : defaultStart,
 			end      : defaultEnd,
 			modifier : defaultModifier,
