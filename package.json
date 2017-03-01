@@ -14,7 +14,8 @@
     "coverage": "nyc report",
     "cover": "npm run test && npm run coverage"
   },
-  "author": "Antonio Rizzo",
+  "repository": "https://github.com/antoniozzo/trekk.git",
+  "author": "Antonio Rizzo <info@antoniorizzo.com>",
   "license": "ISC",
   "dependencies": {
     "args-js": "^0.10.12",
